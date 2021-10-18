@@ -1,8 +1,8 @@
 /*
-	Lab. 2 - Streetlight with Button
-	Control the brightness (0-255) of the LED 
+  Lab. 2 - Streetlight with Button
+  Control the brightness (0-255) of the LED
     depends on the value (0-1023) obtained by a photoresistor.
-	When the pushbutton is pressed, turn off the LED	
+  When the pushbutton is pressed, turn off the LED
 */
 
 // led variable
@@ -24,28 +24,28 @@ void setup()
   digitalWrite(ledPin, LOW);
   pinMode(lightPin, INPUT);
   pinMode(buttonPin, INPUT_PULLUP);
-  
+
   Serial.begin(9600);
 }
 
 void loop()
-{ 
+{
   buttonState = digitalRead(buttonPin);
-  
+
   // button not pressed
-  if (buttonState == 0) 
+  if (buttonState == 0)
   {
     // read photoresistor value
-  	lightVal = analogRead(lightPin);
-  	lightVal = map(lightVal, 0, 1023, 255, 0);
-    analogWrite(ledPin, lightVal); 
+    lightVal = analogRead(lightPin);
+    lightVal = map(lightVal, 0, 1023, 255, 0);
+    analogWrite(ledPin, lightVal);
   }
-  
+
   // button  pressed
-  else 
+  else
   {
     digitalWrite(ledPin, LOW);
   }
- 
+
   delay(dt);
 }

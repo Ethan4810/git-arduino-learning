@@ -1,5 +1,5 @@
 /*
-	Lab. 3 - PushButton Counter
+  Lab. 3 - PushButton Counter
 */
 
 // led variable
@@ -25,20 +25,16 @@ void loop()
   buttonState = digitalRead(buttonPin);
   digitalWrite(ledPin, buttonState);
 
-  while (buttonState != ture)
-
-
-    /*
-      if(buttonState == true)
-      {
-      count = 0;
-      }
-
-      else
-      {
-      Serial.println(count);
-      count++;
-      delay(dt);
-      }
-    */
+  // button pressed
+  if (buttonState == true)
+  {
+    count = 0;
   }
+  // button not pressed
+  else
+  {
+    Serial.println(count);
+    count++;
+    delay(dt);
+  }
+}

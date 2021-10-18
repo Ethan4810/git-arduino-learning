@@ -28,7 +28,7 @@ void loop()
   int duration = pulseIn(echoPin, HIGH);
   float distance = (float)duration * (101. / 5869.);
 
-  // show duration
+  // show duration and distance 
   Serial.print("duration = ");
   Serial.print(duration);
   Serial.print(", distance = ");
