@@ -6,7 +6,6 @@
 int ledPin = 9; // 220 ohm
 int ledState = LOW;
 
-
 // button variables
 int buttonPin = 10; // 10k ohm
 int buttonVal;

@@ -1,5 +1,5 @@
 // hc-sr04 senosr pins
-const int trigreenPin = 5;
+const int trigPin = 5;
 const int echoPin = 6;
 
 // led pins
@@ -27,7 +27,7 @@ int mdt = 500; // middle
 int ldt = 1000; // long
 
 void setup() {
-  pinMode(trigreenPin, OUTPUT);
+  pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
   pinMode(greenPin, OUTPUT);
   pinMode(redPin, OUTPUT);
@@ -64,35 +64,36 @@ void loop() {
     Play Game
   */
 
-  // send ping
-  digitalWrite(trigreenPin, LOW);
+  // send ping from trigger pin
+  digitalWrite(trigPin, LOW);
   delayMicroseconds(10);
-  digitalWrite(trigreenPin, HIGH);
+  digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
 
-  // read first distance
-  h_duration = pulseIn(echoPin, HIGH); 
-  first_distance = (h_duration * 0.0343) / 2.; 
+  // read ping from echo pin
+  h_duration = pulseIn(echoPin, HIGH);
+  first_distance = (h_duration * 0.0343) / 2.;
 
   // save first distance
   Serial.print("First Distance = ");
   Serial.print(first_distance);
   Serial.println(" cm");
 
-  // sense 5 seconds
+  // check distance i times
   int i = 0;
   while (i < 10) {
-    // send ping
-    digitalWrite(trigreenPin, LOW);
+    // send ping from trigger pin
+    digitalWrite(trigPin, LOW);
     delayMicroseconds(10);
-    digitalWrite(trigreenPin, HIGH);
+    digitalWrite(trigPin, HIGH);
     delayMicroseconds(10);
 
-    // read reflected ping from receiver
-    h_duration = pulseIn(echoPin, HIGH); 
+    // read ping from echo pin
+    h_duration = pulseIn(echoPin, HIGH);
     distance = (h_duration * 0.0343) / 2.;
 
-    delay(200);
+    // total 3 seconds (10 x 300 = 3000)
+    delay(300);
     i++;
 
     // show distance
@@ -100,10 +101,8 @@ void loop() {
     Serial.print(distance);
     Serial.println(" cm");
 
-    // distance range 5cm
-    
     // player move
-    if ((2 <= abs(first_distance - distance)) && (abs(first_distance - distance) < 30)) {
+    if ((3 <= abs(first_distance - distance)) && (abs(first_distance - distance) < 30)) {
       tone(musicPin, 600, 3000);
       delay(500);
       noTone(musicPin);
@@ -114,7 +113,7 @@ void loop() {
       delay(500);
       break;
     }
-    // player dont; move
+    // player don't move
     else {
       digitalWrite(alarmPin, LOW);
       continue;
@@ -122,9 +121,7 @@ void loop() {
 
   }
   digitalWrite(redPin, LOW);
-
 }
-
 
 int frequency(char note)
 {

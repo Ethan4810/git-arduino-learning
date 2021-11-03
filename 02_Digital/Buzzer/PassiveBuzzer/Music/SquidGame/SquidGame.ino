@@ -6,7 +6,6 @@ int songLength = strlen(notes);
 int beats[] = {1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2};
 int tempo = 280; // how fast
 
-
 void setup() {
   pinMode(buzzPin, OUTPUT);
 }
