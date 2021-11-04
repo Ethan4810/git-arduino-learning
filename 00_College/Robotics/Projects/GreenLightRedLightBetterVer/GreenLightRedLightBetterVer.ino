@@ -202,7 +202,7 @@ bool isMove()
   // check only in this range (noise prevention)
   // for human: 10 < diff < 15
   // for object: 2 < diff < 15
-  if (5 < diff && diff < 15)
+  if (2 < diff && diff < 15)
   {
     return true;
   }
@@ -213,6 +213,8 @@ bool isMove()
     return false;
   }
 }
+
+
 
 void playAlarm()
 {
