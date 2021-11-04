@@ -176,9 +176,9 @@ void playTheme(char notes[], int beats[])
 int readDistance(int read_time)
 {
   // send ping from trigger pin
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(10);
   digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
   delayMicroseconds(10);
 
   // read ping from echo pin
@@ -198,10 +198,7 @@ bool isMove()
 {
   diff = abs(stop_distance - move_distance);
 
-  // player move
-  // check only in this range (noise prevention)
-  // for human: 10 < diff < 15
-  // for object: 2 < diff < 15
+  // player move (check only in this range for noise prevention)
   if (2 < diff && diff < 15)
   {
     return true;
@@ -213,8 +210,6 @@ bool isMove()
     return false;
   }
 }
-
-
 
 void playAlarm()
 {
