@@ -17,11 +17,10 @@ void setup() {
 
 void loop() {
   // send ping from trigger
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(10);
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
+  delayMicroseconds(10);
 
   // read reflected ping from receiver
   // speed of sound = 343 m/s (20'C)
