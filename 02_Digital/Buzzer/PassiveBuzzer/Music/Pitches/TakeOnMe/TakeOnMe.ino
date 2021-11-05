@@ -23,21 +23,22 @@ int durations[] = {
   4, 7, 8, 8, 8, 8
 };
 
-// determine the length of the arrays to use in the loop iteration
-int songLength = sizeof(melody) / sizeof(melody[0]);
-
 void setup() {
   pinMode(musicPin, OUTPUT);
+  
   Serial.begin(9600);
 }
 
 void loop() {
-  for (int thisNote = 0; thisNote < songLength; thisNote++) 
+  // determine the length of the arrays to use in the loop iteration
+  int songLength = sizeof(melody) / sizeof(int);
+  
+  for (int i = 0; i < songLength; i++)
   {
-    int duration = 1000 / durations[thisNote];
+    int duration = 1000 / durations[i];
     int pauseTime = duration * 1.3;
-   
-    tone(musicPin, melody[thisNote], duration);
+
+    tone(musicPin, melody[i], duration);
     delay(pauseTime);
     noTone(musicPin);
   }
