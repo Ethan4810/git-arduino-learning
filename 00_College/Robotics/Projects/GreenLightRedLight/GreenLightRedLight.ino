@@ -7,6 +7,11 @@
    3. Game music plays
    4. Distance detection
    5. Gane Won/Lost
+
+   Things to Do
+   - adjust button sensitivity (debounce time)
+   - adjust distance difference (human or object)
+   - add win distance feature
 */
 
 
@@ -86,7 +91,7 @@ int win_durations[] = {
 };
 int win_theme_len = sizeof(win_melodies) / sizeof(int);
 
-// lost theme 
+// lost theme
 int lost_melodies[] = {
   NOTE_C5, NOTE_B4, NOTE_A4, NOTE_B4, NOTE_A4, NOTE_G4,
   NOTE_A4, NOTE_G4, NOTE_F4, NOTE_C4
@@ -96,7 +101,6 @@ int lost_durations[] = {
   6, 6, 6, 2
 };
 int lost_theme_len = sizeof(lost_melodies) / sizeof(int);
-
 
 void setup() {
   Serial.begin(9600);
@@ -112,7 +116,7 @@ void setup() {
   digitalWrite(redPin, LOW);
 
   // button setup
-  button.setDebounceTime(100);
+  button.setDebounceTime(50);
 
   // servo setup
   servo.attach(servoPin, 500, 2500);
@@ -126,22 +130,35 @@ void setup() {
   Serial.println("***********************");
   Serial.println("Playing main music ...");
   playTheme(main_melodies, main_durations, main_theme_len);
-
   delay(2000);
 }
 
-
 void loop()
 {
-  button.loop();
-  // button not pressed (game continues)
-  while (!button.isPressed())  {
-    button.loop();
+  // loop through game counts
+  for (int game_cnt = 0; game_cnt < 5 ; game_cnt++)
+  {
+    if (isButtonPressed())
+    {
+      // button pressed (game won)
+      digitalWrite(greenPin, HIGH);
+      digitalWrite(redPin, LOW);
+      playTheme(win_melodies, win_durations, win_theme_len);
+      delay(1000);
+      exit(0);
+    }
+
+    // print game count
+    Serial.println("***********************");
+    Serial.print("\t");
+    Serial.print("Game ");
+    Serial.println(game_cnt + 1);
+
     // green light
     servo.write(posToWall);
     digitalWrite(greenPin, HIGH);
     digitalWrite(redPin, LOW);
-    Serial.println("***********************");
+    Serial.println("-----------------------");
     Serial.println("Green Light ...");
     playTheme(game_melodies, game_durations, game_theme_len);
 
@@ -153,7 +170,6 @@ void loop()
     delay(1000);
 
     // read stop distance
-    // TODO: fix (first distance = 0 cm error)
     Serial.println("-----------------------");
     Serial.print("Stop ");
     stop_distance = readDistance(300);
@@ -165,8 +181,8 @@ void loop()
       Serial.print("Move ");
       move_distance = readDistance(80);
 
-      // player move (game lost)
-      if (isMove())
+      // player move (game over)
+      if (isPlayerMove())
       {
         Serial.println("***********************");
         playAlarm();
@@ -175,19 +191,18 @@ void loop()
         exit(0);
       }
 
-      // player stay still (game continue)
+      // player stay still (game continues)
       else
       {
         continue;
       }
     }
   }
-
-  // button pressed (game won)
+  // game count over (game over)
   Serial.println("-----------------------");
-  digitalWrite(greenPin, HIGH);
-  digitalWrite(redPin, LOW);
-  playTheme(win_melodies, win_durations, win_theme_len);
+  Serial.println("Out of count. You lost!");
+  Serial.println("***********************");
+  playTheme(lost_melodies, lost_durations, lost_theme_len);
   exit(0);
 }
 
@@ -202,6 +217,25 @@ void playTheme(int melodies[], int durations[], int theme_length)
     delay(pause_time);
     noTone(musicPin);
   }
+}
+
+bool isButtonPressed()
+{
+  button.loop();
+
+  // button pressed
+  if (button.isPressed())
+  {
+    Serial.println("-----------------------");
+    Serial.println("Button is pressed!");
+    Serial.println("***********************");
+    return true;
+  }
+
+  // button not pressed
+  Serial.println("-----------------------");
+  Serial.println("Button is not pressed.");
+  return false;
 }
 
 int readDistance(int read_time)
@@ -219,25 +253,25 @@ int readDistance(int read_time)
   // show distance and button state
   Serial.print("Distance = ");
   Serial.print(distance);
-  Serial.println(" cm  ");
+  Serial.println(" cm");
   delay(read_time);
 
   return distance;
 }
 
-bool isMove()
+bool isPlayerMove()
 {
   diff = abs(stop_distance - move_distance);
 
   // player move (game lost)
-  if (7 < diff && diff < 15) // noise removal
+  if (7 < diff && diff < 10) // noise removal
   {
     Serial.println("-----------------------");
     Serial.println("Player 324 eliminated !");
     return true;
   }
 
-  // player stay still (game continue)
+  // player stay still (game continues)
   else
   {
     return false;
