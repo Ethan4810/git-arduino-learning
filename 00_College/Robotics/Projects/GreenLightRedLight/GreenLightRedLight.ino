@@ -14,7 +14,6 @@
    - add win distance feature
 */
 
-
 // button pins and variables
 #include <ezButton.h>
 ezButton button(12);
