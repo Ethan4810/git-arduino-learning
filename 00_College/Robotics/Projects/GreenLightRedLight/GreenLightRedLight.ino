@@ -19,31 +19,31 @@
 ezButton button(12);
 int btnState;
 
-// servo pin and variables
-#include <Servo.h>
-int posToWall = 0;
-int posToPlayer = 180;
-int servoPin = 9;
-Servo servo;
+// passive buzzer pins
+#include "pitches.h"
+const int musicPin = 2;
+const int alarmPin = 3;
+
+// led pins
+const int greenPin = 4;
+const int redPin = 5;
 
 // hc-sr04 sensor pins and variables
 // optimal range: 2 cm ~ 400 cm
-const int trigPin = 5;
-const int echoPin = 6;
+const int trigPin = 6;
+const int echoPin = 7;
 long read_duration;
 int distance;
 int stop_distance;
 int move_distance;
 int diff;
 
-// led pins
-const int greenPin = 7;
-const int redPin = 8;
-
-// passive buzzer pins
-#include "pitches.h"
-const int musicPin = 2;
-const int alarmPin = 3;
+// servo pin and variables
+#include <Servo.h>
+int posToWall = 0;
+int posToPlayer = 180;
+int servoPin = 8;
+Servo servo;
 
 // main theme (squid game)
 int main_melodies[] = {
